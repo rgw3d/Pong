@@ -12,7 +12,7 @@ public class Base extends JFrame {
 	public Base() {
 		add(new Board());
 		setTitle("Pong");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //hekked m8
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 500);
 		setVisible(true);
 		setResizable(false);
