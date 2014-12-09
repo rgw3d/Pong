@@ -25,6 +25,9 @@ public class Board extends JPanel
     private int PaddleHeight = 70;
     private int BallWidth = 25;
     private int BallHeight = 25;
+    private int WallWidth = 20;
+    private int PaddleSpeed = 2;
+    private int PaddleDistanceFromWall = 100;
     private Collision collisionDetector;
     private int Paddle1WinCount = 0;
     private int Paddle2WinCount = 0;
@@ -44,14 +47,14 @@ public class Board extends JPanel
         BoardWidth = width;
         BoardHeight = height;
 
-        Paddle1 = new Paddle(100, BoardHeight /2, BoardWidth, BoardHeight,4,60, PaddleWidth, PaddleHeight);
-        Paddle2 = new Paddle(BoardWidth - 100, BoardHeight /2, BoardWidth, BoardHeight, 4,60,PaddleWidth,PaddleHeight);
+        Paddle1 = new Paddle(PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight,PaddleSpeed,WallWidth, PaddleWidth, PaddleHeight);
+        Paddle2 = new Paddle(BoardWidth - PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight, PaddleSpeed,WallWidth,PaddleWidth,PaddleHeight);
         Ball1 = new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,2, getState() ,BallWidth , BallHeight);
 
-        WallTop = new Wall(0, 0, BoardWidth,20);
-        WallBottom = new Wall(0, BoardHeight -55, BoardWidth,20);
-        WallRight = new Wall(BoardWidth - 20,0,20, BoardHeight);
-        WallLeft = new Wall(0,0, 20, BoardHeight);
+        WallTop = new Wall(0, 0, BoardWidth,WallWidth);
+        WallBottom = new Wall(0, BoardHeight -55, BoardWidth,WallWidth);
+        WallRight = new Wall(BoardWidth - WallWidth,0,WallWidth, BoardHeight);
+        WallLeft = new Wall(0,0, WallWidth, BoardHeight);
 
 
         collisionDetector = new Collision(Paddle1,Paddle2, Ball1,WallTop,WallBottom,WallLeft,WallRight,this);
@@ -78,7 +81,7 @@ public class Board extends JPanel
                     State = GameState.paddle1Serve;
                     Paddle1WinCount++;
                 }
-                else if(State == GameState.paddle2Win) {
+                else {
                     State = GameState.paddle2Serve;
                     Paddle2WinCount++;
                 }
@@ -111,7 +114,7 @@ public class Board extends JPanel
         g.setFont(g.getFont().deriveFont(FontSize));
 
         g2d.drawString(""+Paddle1WinCount,BoardWidth/8,BoardHeight/4);
-        g2d.drawString(""+Paddle2WinCount,BoardWidth*5/8,BoardHeight/4);
+        g2d.drawString(""+Paddle2WinCount,BoardWidth*3/4,BoardHeight/4);
 		
 		g2d.setColor(Color.GREEN);
 		g2d.fillRect(Paddle1.getX(), Paddle1.getY(), PaddleWidth, PaddleHeight);
@@ -159,8 +162,8 @@ public class Board extends JPanel
     }
 
     public void reset(){
-        Paddle1 = new Paddle(100, BoardHeight /2, BoardWidth, BoardHeight,4,60, PaddleWidth, PaddleHeight);
-        Paddle2 = new Paddle(BoardWidth - 100, BoardHeight /2, BoardWidth, BoardHeight, 4,60,PaddleWidth,PaddleHeight);
+        Paddle1 = new Paddle(PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight,PaddleSpeed,WallWidth, PaddleWidth, PaddleHeight);
+        Paddle2 = new Paddle(BoardWidth - PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight, PaddleSpeed,WallWidth,PaddleWidth,PaddleHeight);
         Ball1 = new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,2, getState() ,BallWidth , BallHeight);
         collisionDetector = new Collision(Paddle1,Paddle2, Ball1,WallTop,WallBottom,WallLeft,WallRight,this);
         removeKeyListener(KeyControl);

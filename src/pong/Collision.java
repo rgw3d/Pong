@@ -14,7 +14,7 @@ public class Collision {
     Wall Top,Bottom,Left,Right;
     Ball Ball;
 
-    private double degreeDeflectionRange = 30;
+    private double DegreeDeflectionRange = 30;
 
 
     public Collision(Paddle paddle1, Paddle paddle2, Ball ball, Wall top, Wall bottom, Wall left, Wall right, Board board){
@@ -74,7 +74,7 @@ public class Collision {
             double p1Y = p1.getY()+p1.getHeight()/2;
             double b1Y = b1.getY()+b1.getHeight()/2;
             double displacment = b1Y-p1Y;
-            Ball.changeAngle((int)(displacment*(degreeDeflectionRange/(p1.getHeight()/2))));
+            Ball.changeAngle((int)(displacment*(DegreeDeflectionRange /(p1.getHeight()/2))));
             System.out.println(Ball.getAngle());
         }
 
@@ -84,7 +84,7 @@ public class Collision {
             double p2Y = p2.getY() + p2.getHeight() / 2;
             double b1Y = b1.getY() + b1.getHeight() / 2;
             double displacment =  p2Y - b1Y;
-            Ball.changeAngle(180 + (int) (displacment * (degreeDeflectionRange / (p2.getHeight() / 2))));
+            Ball.changeAngle(180 + (int) (displacment * (DegreeDeflectionRange / (p2.getHeight() / 2))));
             System.out.println(Ball.getAngle());
         }
 

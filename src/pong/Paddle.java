@@ -7,7 +7,7 @@ public class Paddle implements GameObject {
 
 	private int x, y, dy;
     private int Speed = 2;
-    private int BufferHeight = 30;
+    private int WallWidth = 30;
     private int BoardHeight;
     private int BoardWidth;
     private int PaddleWidth,PaddleHeight;
@@ -19,12 +19,12 @@ public class Paddle implements GameObject {
      * @param boardWidth width of the board
      * @param boardHeight boardHeight of the board
      * @param speed how many pixles the paddle moves. if set to zero, the default of 2 is used.
-     * @param bufferHeight area from the top or bottom of the screen that the paddle can go up to
+     * @param wallWidth used to go up to the wall and not go over it.  Used to calculate the Boarder distance of the paddle
      * @param paddleWidth width that the paddle is drawn
      * @param paddleHeight height that the paddle is drawn
      *
      */
-    public Paddle(int distFromLeft, int distFromTop, int boardWidth, int boardHeight, int speed, int bufferHeight, int paddleWidth, int paddleHeight){
+    public Paddle(int distFromLeft, int distFromTop, int boardWidth, int boardHeight, int speed, int wallWidth, int paddleWidth, int paddleHeight){
         x = distFromLeft;
         y = distFromTop;
 
@@ -34,8 +34,8 @@ public class Paddle implements GameObject {
         BoardHeight = boardWidth;
         BoardWidth = boardHeight;
 
-        if(bufferHeight!=0){
-            BufferHeight = bufferHeight;
+        if(wallWidth !=0){
+            WallWidth = wallWidth;
         }
 
         PaddleHeight = paddleHeight;
@@ -60,18 +60,18 @@ public class Paddle implements GameObject {
     }
 
     public void move() {
-        if((dy<0 && y>BufferHeight)||(dy>0 && y< BoardWidth -BufferHeight*3))
+        if((dy<0 && y> WallWidth)||(dy>0 && y< BoardWidth -(WallWidth +PaddleHeight+PaddleHeight/2)))
             y += dy;
     }
 	
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 				
-		if(((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP))&& y>BufferHeight  ) {
+		if(((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP))) {
 			dy = -Speed;
         }
 		
-		if(((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN))&& y< BoardWidth -BufferHeight*2.5 ) {
+		if(((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) ) {
 			dy = Speed;
 		}
 		
