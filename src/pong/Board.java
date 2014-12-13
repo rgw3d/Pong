@@ -3,6 +3,7 @@ package pong;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public class Board extends JPanel
     private int BallHeight = 25;
     private int WallWidth = 20;
     private int PaddleSpeed = 2;
-    private int BallSpeed = 1;
+    private int BallSpeed = 2;
     private int PaddleDistanceFromWall = 100;
     private Collision collisionDetector;
     private int Paddle1WinCount = 0;
@@ -35,7 +36,6 @@ public class Board extends JPanel
     private float FontSize = 200f;
     private long TimeDelayAfterWin =3000;//miliseconds
     private Base base;
-
     private Date ResetDate = null;
 
 	
@@ -56,11 +56,6 @@ public class Board extends JPanel
         BaseHeight = base.getHeight();
         BoardWidth = this.getWidth();
         BoardHeight = this.getHeight();
-
-        System.out.println(BaseWidth + " baseWidth");
-        System.out.println(BaseHeight + " baseHeight");
-        System.out.println(BoardWidth + " boardWidth");
-        System.out.println(BoardHeight + " boardHeight");
     }
 
     public void InitGameObjects(){
@@ -177,14 +172,10 @@ public class Board extends JPanel
     }
 
     public void reset(){
-        Paddle1 = new Paddle(PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight,PaddleSpeed,WallWidth, PaddleWidth, PaddleHeight);
-        Paddle2 = new Paddle(BoardWidth - PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight, PaddleSpeed,WallWidth,PaddleWidth,PaddleHeight);
-        Ball1 = new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,2, getState() ,BallWidth , BallHeight);
-        collisionDetector = new Collision(Paddle1,Paddle2, Ball1,WallTop,WallBottom,WallLeft,WallRight,this);
+        InitGameObjects();
         removeKeyListener(KeyControl);
-        KeyControl = new KeyControl(Paddle1,Paddle2);
+        InitKeyListener();
         ResetDate = null;
-        addKeyListener(KeyControl);
 
     }
 

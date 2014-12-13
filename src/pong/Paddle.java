@@ -5,7 +5,8 @@ import java.awt.event.KeyEvent;
 
 public class Paddle implements GameObject {
 
-	private int x, y, dy;
+	private int x;
+    private int y;
     private int Speed = 2;
     private int WallWidth = 30;
     private int BoardHeight;
@@ -63,19 +64,18 @@ public class Paddle implements GameObject {
     }
 
     public void move() {
-        if(UpPressed && !DownPressed){
+        int dy;
+        if(UpPressed && !DownPressed)
             dy = -Speed;
-        }
-        else if (!UpPressed && DownPressed){
+        else if (!UpPressed && DownPressed)
             dy = Speed;
-        }
-        else {
+        else
             dy = 0;
+
+        if(dy !=0 &&(y>=WallWidth && y<=BoardHeight-(WallWidth+PaddleHeight))){
+            y+= dy;
         }
-        if(dy!=0 &&(y>=WallWidth && y<=BoardHeight-(WallWidth+PaddleHeight))){
-            y+=dy;
-        }
-        else if(dy!= 0){//this is if it wants to move but it cant because it is not in the bounds.
+        else if(dy != 0){//this is if it wants to move but it cant because it is not in the bounds.
             if(!(y>=WallWidth) && y<=BoardHeight-(WallWidth+PaddleHeight)){//this tests to see what bounds it is out of
                 y=WallWidth;//then it will set it to the highest possible value that is still in the bounds
             }
@@ -103,7 +103,6 @@ public class Paddle implements GameObject {
 	
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-        System.out.println("it got here");
         if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP)){
             UpPressed = false;
         }

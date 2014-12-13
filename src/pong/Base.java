@@ -1,6 +1,6 @@
 package pong;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Base extends JFrame {
 
@@ -13,7 +13,7 @@ public class Base extends JFrame {
 
     public Base() {
         setTitle("Pong");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(width, height);
         setVisible(true);
         setResizable(false);
@@ -26,9 +26,6 @@ public class Base extends JFrame {
         board.InitGameObjects();
         board.InitKeyListener();
         board.StartTimer();
-        //TODO: board.setWidth , board.setHeight.
-        //TODO: board.startTimer();
-        //add(new Board(width,height));
 
     }
 }
