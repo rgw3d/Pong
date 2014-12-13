@@ -8,21 +8,21 @@ import java.awt.event.KeyEvent;
  * Created by rgw3d on 12/3/2014.
  */
 public class KeyControl extends KeyAdapter {
-    public Paddle paddle1;
-    public Paddle paddle2;
+    public Paddle Paddle1;
+    public Paddle Paddle2;
     public KeyControl(Paddle a, Paddle b){
-        paddle1 = a;
-        paddle2 = b;
+        Paddle1 = a;
+        Paddle2 = b;
     }
 
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
 
         if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_S)) {
-            paddle1.keyReleased(e);
+            Paddle1.keyReleased(e);
         }
         if((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_DOWN)) {
-            paddle2.keyReleased(e);
+            Paddle2.keyReleased(e);
         }
     }
 
@@ -30,10 +30,10 @@ public class KeyControl extends KeyAdapter {
         int key = e.getKeyCode();
 
         if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_S)) {
-            paddle1.keyPressed(e);
+            Paddle1.keyPressed(e);
         }
         if((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_DOWN)) {
-            paddle2.keyPressed(e);
+            Paddle2.keyPressed(e);
         }
     }
 }

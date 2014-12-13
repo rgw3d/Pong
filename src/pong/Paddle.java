@@ -12,6 +12,9 @@ public class Paddle implements GameObject {
     private int BoardWidth;
     private int PaddleWidth,PaddleHeight;
 
+    private boolean UpPressed = false;
+    private boolean DownPressed = false;
+
 
     /**
      * @param distFromLeft distance from either the right or left wall.
@@ -31,8 +34,8 @@ public class Paddle implements GameObject {
         if(speed!=0){
             Speed = speed;
         }
-        BoardHeight = boardWidth;
-        BoardWidth = boardHeight;
+        BoardHeight = boardHeight;
+        BoardWidth = boardWidth;
 
         if(wallWidth !=0){
             WallWidth = wallWidth;
@@ -60,28 +63,53 @@ public class Paddle implements GameObject {
     }
 
     public void move() {
-        if((dy<0 && y> WallWidth)||(dy>0 && y< BoardWidth -(WallWidth +PaddleHeight+PaddleHeight/2)))
-            y += dy;
+        if(UpPressed && !DownPressed){
+            dy = -Speed;
+        }
+        else if (!UpPressed && DownPressed){
+            dy = Speed;
+        }
+        else {
+            dy = 0;
+        }
+        if(dy!=0 &&(y>=WallWidth && y<=BoardHeight-(WallWidth+PaddleHeight))){
+            y+=dy;
+        }
+        else if(dy!= 0){//this is if it wants to move but it cant because it is not in the bounds.
+            if(!(y>=WallWidth) && y<=BoardHeight-(WallWidth+PaddleHeight)){//this tests to see what bounds it is out of
+                y=WallWidth;//then it will set it to the highest possible value that is still in the bounds
+            }
+            else if(y>=WallWidth && !(y<=BoardHeight-(WallWidth+PaddleHeight))){
+                y = BoardHeight-(WallWidth+PaddleHeight);
+            }
+        }
     }
 	
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 				
 		if(((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP))) {
-			dy = -Speed;
+            UpPressed = true;
         }
-		
-		if(((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) ) {
-			dy = Speed;
-		}
+
+        if(((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) ) {
+            DownPressed = true;
+        }
+
+
+
 		
 	}
 	
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
+        System.out.println("it got here");
+        if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP)){
+            UpPressed = false;
+        }
 		
-		if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP) || (key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) {
-			dy = 0;
+		if((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) {
+			DownPressed = false;
 		}
 	}
 

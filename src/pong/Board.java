@@ -1,9 +1,6 @@
 package pong;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,6 +16,8 @@ public class Board extends JPanel
     private KeyControl KeyControl;
     private ArrayList<GameObject> GameObjects;
 	private Timer TickTimer;
+    private int BaseWidth;
+    private int BaseHeight;
 	private int BoardWidth;
 	private int BoardHeight;
     private int PaddleWidth = 10;
@@ -27,6 +26,7 @@ public class Board extends JPanel
     private int BallHeight = 25;
     private int WallWidth = 20;
     private int PaddleSpeed = 2;
+    private int BallSpeed = 1;
     private int PaddleDistanceFromWall = 100;
     private Collision collisionDetector;
     private int Paddle1WinCount = 0;
@@ -34,38 +34,59 @@ public class Board extends JPanel
     private GameState State = Board.GameState.play;
     private float FontSize = 200f;
     private long TimeDelayAfterWin =3000;//miliseconds
+    private Base base;
 
     private Date ResetDate = null;
 
 	
-	public Board(int width, int height) {
+	public Board(int width,int height) {
         setFocusable(true);
         setVisible(true);
         setBackground(Color.DARK_GRAY);
         setDoubleBuffered(true);
+        setPreferredSize(new Dimension(width,height));
+	}
 
-        BoardWidth = width;
-        BoardHeight = height;
+    public void InitDimensions(){
+        base = (Base) SwingUtilities.getWindowAncestor(this);
+        if(base == null)
+            System.out.println("Base is null!");
 
+        BaseWidth = base.getWidth();
+        BaseHeight = base.getHeight();
+        BoardWidth = this.getWidth();
+        BoardHeight = this.getHeight();
+
+        System.out.println(BaseWidth + " baseWidth");
+        System.out.println(BaseHeight + " baseHeight");
+        System.out.println(BoardWidth + " boardWidth");
+        System.out.println(BoardHeight + " boardHeight");
+    }
+
+    public void InitGameObjects(){
         Paddle1 = new Paddle(PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight,PaddleSpeed,WallWidth, PaddleWidth, PaddleHeight);
         Paddle2 = new Paddle(BoardWidth - PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight, PaddleSpeed,WallWidth,PaddleWidth,PaddleHeight);
-        Ball1 = new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,2, getState() ,BallWidth , BallHeight);
+        Ball1 = new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState() ,BallWidth , BallHeight);
 
         WallTop = new Wall(0, 0, BoardWidth,WallWidth);
-        WallBottom = new Wall(0, BoardHeight -55, BoardWidth,WallWidth);
+        WallBottom = new Wall(0, BoardHeight-WallWidth, BoardWidth,WallWidth);
         WallRight = new Wall(BoardWidth - WallWidth,0,WallWidth, BoardHeight);
         WallLeft = new Wall(0,0, WallWidth, BoardHeight);
 
 
         collisionDetector = new Collision(Paddle1,Paddle2, Ball1,WallTop,WallBottom,WallLeft,WallRight,this);
 
+    }
+
+    public void InitKeyListener(){
         KeyControl = new KeyControl(Paddle1,Paddle2);
-		addKeyListener(KeyControl);
+        addKeyListener(KeyControl);
+    }
 
+    public void StartTimer(){
         TickTimer = new Timer(5,new Update());
-		TickTimer.start();
-
-	}
+        TickTimer.start();
+    }
 
     public class Update implements ActionListener{
         public void actionPerformed(ActionEvent e) {
@@ -137,13 +158,7 @@ public class Board extends JPanel
 
 		g.dispose();
 	}
-	
-	/*public void addNotify() {
-		super.addNotify();
-		BoardWidth = getWidth();
-		BoardHeight = getHeight();
-	}
-*/
+
     public GameState getState(){
         return State;
     }
