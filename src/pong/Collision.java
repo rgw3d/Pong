@@ -1,6 +1,6 @@
 package pong;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 public class Collision {
 
     Board Board;
-    Paddle Paddle1,Paddle2;
-    Wall Top,Bottom,Left,Right;
+    Paddle Paddle1, Paddle2;
+    Wall Top, Bottom, Left, Right;
     ArrayList<Ball> Balls = new ArrayList<Ball>();
 
     private double DegreeDeflectionRange = 30;
 
 
-    public Collision(Paddle paddle1, Paddle paddle2, ArrayList<Ball> balls, Wall top, Wall bottom, Wall left, Wall right, Board board){
+    public Collision(Paddle paddle1, Paddle paddle2, ArrayList<Ball> balls, Wall top, Wall bottom, Wall left, Wall right, Board board) {
         Paddle1 = paddle1;
         Paddle2 = paddle2;
         Balls = balls;
@@ -29,7 +29,7 @@ public class Collision {
         Board = board;
     }
 
-    public void detectCollision(){
+    public void detectCollision() {
         for (Ball ballObject : Balls) {
 
             Rectangle paddle1Rect = Paddle1.getBounds();
@@ -72,29 +72,23 @@ public class Collision {
         }
     }
 
-    public void changeAngle(Rectangle b1, Rectangle p1, Rectangle p2, Ball ballObject){
-        if(p1.intersects(b1) ){
+    public void changeAngle(Rectangle b1, Rectangle p1, Rectangle p2, Ball ballObject) {
+        if (p1.intersects(b1)) {
             System.out.println(ballObject.getAngle());
-            double p1Y = p1.getY()+p1.getHeight()/2;
-            double b1Y = b1.getY()+b1.getHeight()/2;
-            double displacment = b1Y-p1Y;
+            double p1Y = p1.getY() + p1.getHeight() / 2;
+            double b1Y = b1.getY() + b1.getHeight() / 2;
+            double displacment = b1Y - p1Y;
             ballObject.changeAngle((int) (displacment * (DegreeDeflectionRange / (p1.getHeight() / 2))));
             System.out.println(ballObject.getAngle());
-        }
-
-
-        else if (p2.intersects(b1)) {
+        } else if (p2.intersects(b1)) {
             System.out.println(ballObject.getAngle());
             double p2Y = p2.getY() + p2.getHeight() / 2;
             double b1Y = b1.getY() + b1.getHeight() / 2;
-            double displacment =  p2Y - b1Y;
+            double displacment = p2Y - b1Y;
             ballObject.changeAngle(180 + (int) (displacment * (DegreeDeflectionRange / (p2.getHeight() / 2))));
             System.out.println(ballObject.getAngle());
-        }
-
-
-        else{
-            ballObject.changeAngle(-ballObject.getAngle()+180);
+        } else {
+            ballObject.changeAngle(-ballObject.getAngle() + 180);
         }
 
     }

@@ -7,10 +7,6 @@ public class Base extends JFrame {
     public int width = 1500;
     public int height = 750;
 
-    public static void main(String args[]) {
-        new Base();
-    }
-
     public Base() {
         setTitle("Pong");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -18,7 +14,7 @@ public class Base extends JFrame {
         setVisible(true);
         setResizable(false);
 
-        Board board = new Board(width,height);
+        Board board = new Board(width, height);
         setContentPane(board);
         pack();
 
@@ -27,5 +23,9 @@ public class Base extends JFrame {
         board.InitKeyListener();
         board.StartTimer();
 
+    }
+
+    public static void main(String args[]) {
+        new Base();
     }
 }

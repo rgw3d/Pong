@@ -8,10 +8,10 @@ import java.awt.*;
  */
 public class Wall implements GameObject {
 
-    private int x,y;
+    private int x, y;
     private int WallWidth, WallHeight;
 
-    public Wall(int distFromLeft, int distFromTop, int wallWidth, int wallHeight){
+    public Wall(int distFromLeft, int distFromTop, int wallWidth, int wallHeight) {
         this.x = distFromLeft;
         this.y = distFromTop;
         WallWidth = wallWidth;
@@ -38,6 +38,7 @@ public class Wall implements GameObject {
         return WallHeight;
     }
 
-    public void move() {}
+    public void move() {
+    }
 
 }

@@ -9,23 +9,23 @@ import java.util.Random;
  */
 public class Ball implements GameObject {
 
-    private double x,y;
+    private double x, y;
     private int Magnitude = 2;
     private int Angle = 0;//in degrees
     private int BoardWidth, BoardHeight;
-    private int BallWidth,BallHeight;
+    private int BallWidth, BallHeight;
     private int MaxMagnitude = 8;
 
     /**
      * @param distFromLeft distance from either the right or left wall.
-     * @param distFromTop distance from either the top or the bottom.
-     * @param boardWidth width of the board
-     * @param boardHeight height of the board
-     * @param magnitude magnitude of the ball moves. if set to zero, the default of 2 is used.
-     * @param ballWidth width that the ball is drawn
-     * @param ballHeight height that the ball is drawn
+     * @param distFromTop  distance from either the top or the bottom.
+     * @param boardWidth   width of the board
+     * @param boardHeight  height of the board
+     * @param magnitude    magnitude of the ball moves. if set to zero, the default of 2 is used.
+     * @param ballWidth    width that the ball is drawn
+     * @param ballHeight   height that the ball is drawn
      */
-    public Ball(int distFromLeft, int distFromTop,  int boardWidth, int boardHeight, int magnitude, Board.GameState state, int ballWidth, int ballHeight) {
+    public Ball(int distFromLeft, int distFromTop, int boardWidth, int boardHeight, int magnitude, Board.GameState state, int ballWidth, int ballHeight) {
 
         x = distFromLeft;
         y = distFromTop;
@@ -37,17 +37,15 @@ public class Ball implements GameObject {
             Magnitude = magnitude;
         }
 
-        if(state == Board.GameState.paddle1Serve){
-            Angle = 45 - (int)(90 * (new Random()).nextDouble());
-        }
-        else if(state == Board.GameState.paddle2Serve){
-            Angle = 225 - (int)(90 * (new Random()).nextDouble());
-        }
-        else{
-            if((new Random()).nextDouble()>.5)
-                Angle = 45 - (int)(90 * (new Random()).nextDouble());
+        if (state == Board.GameState.paddle1Serve) {
+            Angle = 45 - (int) (90 * (new Random()).nextDouble());
+        } else if (state == Board.GameState.paddle2Serve) {
+            Angle = 225 - (int) (90 * (new Random()).nextDouble());
+        } else {
+            if ((new Random()).nextDouble() > .5)
+                Angle = 45 - (int) (90 * (new Random()).nextDouble());
             else
-                Angle = 225 - (int)(90 * (new Random()).nextDouble());
+                Angle = 225 - (int) (90 * (new Random()).nextDouble());
         }
 
         BallWidth = ballWidth;
@@ -57,39 +55,43 @@ public class Ball implements GameObject {
 
 
     public int getX() {
-        return  (int) x;
+        return (int) x;
     }
 
     public int getY() {
         return (int) y;
     }
 
-    public int getObjWidth() { return BallWidth;}
+    public int getObjWidth() {
+        return BallWidth;
+    }
 
-    public int getObjHeight() { return BallHeight; }
+    public int getObjHeight() {
+        return BallHeight;
+    }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, BallWidth, BallHeight);
+        return new Rectangle((int) x, (int) y, BallWidth, BallHeight);
     }
 
     public void move() {
-        y+=Math.sin(Math.toRadians(Angle))*Magnitude;
-        x+=Math.cos(Math.toRadians(Angle))*Magnitude;
+        y += Math.sin(Math.toRadians(Angle)) * Magnitude;
+        x += Math.cos(Math.toRadians(Angle)) * Magnitude;
 
     }
 
-    public int getAngle() { return Angle; }
-
-    public void incrementMag(double x){
-        if(Magnitude<MaxMagnitude)
-            Magnitude+=x;
+    public int getAngle() {
+        return Angle;
     }
-    public void changeAngle(int x){
+
+    public void incrementMag(double x) {
+        if (Magnitude < MaxMagnitude)
+            Magnitude += x;
+    }
+
+    public void changeAngle(int x) {
         Angle = x;
     }
-
-
-
 
 
 }
