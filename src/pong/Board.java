@@ -12,6 +12,7 @@ public class Board extends JPanel {
     private ArrayList<Ball> Balls = null;
     private Wall WallTop, WallBottom, WallLeft, WallRight;
     private KeyControl KeyControl;
+    private Collision collisionDetector;
     private Timer TickTimer;
     private int BaseWidth;
     private int BaseHeight;
@@ -19,19 +20,18 @@ public class Board extends JPanel {
     private int BoardHeight;
     private int PaddleWidth = 10;
     private int PaddleHeight = 70;
-    private int BallWidth = 25;
-    private int BallHeight = 25;
-    private int WallWidth = 20;
     private int PaddleSpeed = 2;
-    private int BallSpeed = 2;
     private int PaddleDistanceFromWall = 100;
-    private Collision collisionDetector;
     private int Paddle1WinCount = 0;
     private int Paddle2WinCount = 0;
+    private int BallWidth = 25;
+    private int BallHeight = 25;
+    private int BallSpeed = 2;
+    private int WallWidth = 20;
     private GameState State = GameState.paddle1Serve;
     private float FontSize = 200f;
     private long TimeDelayAfterWin = 3000;//miliseconds
-    private Base base;
+    private Base Base;
     private Date ResetDate = null;
 
 
@@ -44,12 +44,12 @@ public class Board extends JPanel {
     }
 
     public void InitDimensions() {
-        base = (Base) SwingUtilities.getWindowAncestor(this);
-        if (base == null)
+        Base = (Base) SwingUtilities.getWindowAncestor(this);
+        if (Base == null)
             System.out.println("Base is null!");
 
-        BaseWidth = base.getWidth();
-        BaseHeight = base.getHeight();
+        BaseWidth = Base.getWidth();
+        BaseHeight = Base.getHeight();
         BoardWidth = this.getWidth();
         BoardHeight = this.getHeight();
     }
