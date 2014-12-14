@@ -88,28 +88,22 @@ public class Paddle implements GameObject {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 				
-		if(((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP))) {
+		if(((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP)))
             UpPressed = true;
-        }
 
-        if(((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) ) {
+        if(((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) )
             DownPressed = true;
-        }
-
-
-
 		
 	}
 	
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-        if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP)){
+        if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP))
             UpPressed = false;
-        }
 		
-		if((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN)) {
+		if((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN))
 			DownPressed = false;
-		}
+
 	}
 
 
