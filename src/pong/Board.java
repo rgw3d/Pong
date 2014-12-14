@@ -68,7 +68,7 @@ public class Board extends JPanel
 
         Balls = new ArrayList<Ball>();
         Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState() ,BallWidth , BallHeight));
-        Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState().getOpposite() ,BallWidth , BallHeight));
+        //Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState().getOpposite() ,BallWidth , BallHeight));
         collisionDetector = new Collision(Paddle1,Paddle2, Balls,WallTop,WallBottom,WallLeft,WallRight,this);
 
     }
@@ -188,7 +188,9 @@ public class Board extends JPanel
             play.opposite = play;
             play.serveState = paddle1Serve;
             paddle1Serve.opposite = paddle2Serve;
+            paddle1Serve.serveState = paddle1Serve;
             paddle2Serve.opposite = paddle1Serve;
+            paddle2Serve.serveState = paddle2Serve;
             paddle1Game.opposite = paddle2Game;
             paddle2Game.opposite = paddle1Game;
             paddle1Win.opposite = paddle2Win;
