@@ -1,6 +1,7 @@
 package pong;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 /**
  * Created by rgw3d on 12/4/2014.
@@ -12,15 +13,15 @@ public class Collision {
     Board Board;
     Paddle Paddle1,Paddle2;
     Wall Top,Bottom,Left,Right;
-    Ball Ball;
+    ArrayList<Ball> Balls = new ArrayList<Ball>();
 
     private double DegreeDeflectionRange = 30;
 
 
-    public Collision(Paddle paddle1, Paddle paddle2, Ball ball, Wall top, Wall bottom, Wall left, Wall right, Board board){
+    public Collision(Paddle paddle1, Paddle paddle2, ArrayList<Ball> balls, Wall top, Wall bottom, Wall left, Wall right, Board board){
         Paddle1 = paddle1;
         Paddle2 = paddle2;
-        Ball = ball;
+        Balls = balls;
         Top = top;
         Bottom = bottom;
         Left = left;
@@ -29,68 +30,71 @@ public class Collision {
     }
 
     public void detectCollision(){
-        Rectangle p1 = Paddle1.getBounds();
-        Rectangle p2 = Paddle2.getBounds();
-        Rectangle wTop = Top.getBounds();
-        Rectangle wBot = Bottom.getBounds();
-        Rectangle wLeft = Left.getBounds();
-        Rectangle wRight = Right.getBounds();
-        Rectangle b1 = Ball.getBounds();
+        for (Ball ballObject : Balls) {
 
-        if(p1.intersects(b1) || p2.intersects(b1) || wLeft.intersects(b1) || wRight.intersects(b1)){
-            if(wLeft.intersects(b1) || wRight.intersects(b1)){
-                if(wLeft.intersects(b1))
-                    Board.setState(pong.Board.GameState.paddle2Win);
-                else if (wRight.intersects(b1))
-                    Board.setState(pong.Board.GameState.paddle1Win);
-                return;
-            }
+            Rectangle paddle1Rect = Paddle1.getBounds();
+            Rectangle paddle2Rect = Paddle2.getBounds();
+            Rectangle topWall = Top.getBounds();
+            Rectangle botWall = Bottom.getBounds();
+            Rectangle leftWall = Left.getBounds();
+            Rectangle rightWall = Right.getBounds();
+            Rectangle ballRect = ballObject.getBounds();
+
+            if (paddle1Rect.intersects(ballRect) || paddle2Rect.intersects(ballRect) || leftWall.intersects(ballRect) || rightWall.intersects(ballRect)) {
+
+                if (leftWall.intersects(ballRect) || rightWall.intersects(ballRect)) {
+                    if (leftWall.intersects(ballRect))
+                        Board.setState(pong.Board.GameState.paddle2Game);
+                    else if (rightWall.intersects(ballRect))
+                        Board.setState(pong.Board.GameState.paddle1Game);
+                    return;
+                }
 
 
-            changeAngle(b1, p1, p2);
-            Ball.incrementMag(1);
+                changeAngle(ballRect, paddle1Rect, paddle2Rect, ballObject);
+                ballObject.incrementMag(1);
 
-            while(p1.intersects(b1) || p2.intersects(b1)){
-                Ball.move();
-                p1 = Paddle1.getBounds();
-                p2 = Paddle2.getBounds();
-                b1 = Ball.getBounds();
-            }
-        }
-        else if( wTop.intersects(b1) || wBot.intersects(b1) ){
-            System.out.println(Ball.getAngle());
-            Ball.changeAngle(-Ball.getAngle());
-            System.out.println(Ball.getAngle());
-            while(wTop.intersects(b1) || wBot.intersects(b1)){
-                Ball.move();
-                b1 = Ball.getBounds();
+                while (paddle1Rect.intersects(ballRect) || paddle2Rect.intersects(ballRect)) {
+                    ballObject.move();
+                    paddle1Rect = Paddle1.getBounds();
+                    paddle2Rect = Paddle2.getBounds();
+                    ballRect = ballObject.getBounds();
+                }
+            } else if (topWall.intersects(ballRect) || botWall.intersects(ballRect)) {
+                System.out.println(ballObject.getAngle());
+                ballObject.changeAngle(-ballObject.getAngle());
+                System.out.println(ballObject.getAngle());
+                while (topWall.intersects(ballRect) || botWall.intersects(ballRect)) {
+                    ballObject.move();
+                    ballRect = ballObject.getBounds();
+                }
             }
         }
     }
 
-    public void changeAngle(Rectangle b1, Rectangle p1, Rectangle p2){
+    public void changeAngle(Rectangle b1, Rectangle p1, Rectangle p2, Ball ballObject){
         if(p1.intersects(b1) ){
-            System.out.println(Ball.getAngle());
+            System.out.println(ballObject.getAngle());
             double p1Y = p1.getY()+p1.getHeight()/2;
             double b1Y = b1.getY()+b1.getHeight()/2;
             double displacment = b1Y-p1Y;
-            Ball.changeAngle((int)(displacment*(DegreeDeflectionRange /(p1.getHeight()/2))));
-            System.out.println(Ball.getAngle());
+            ballObject.changeAngle((int) (displacment * (DegreeDeflectionRange / (p1.getHeight() / 2))));
+            System.out.println(ballObject.getAngle());
         }
 
 
         else if (p2.intersects(b1)) {
-            System.out.println(Ball.getAngle());
+            System.out.println(ballObject.getAngle());
             double p2Y = p2.getY() + p2.getHeight() / 2;
             double b1Y = b1.getY() + b1.getHeight() / 2;
             double displacment =  p2Y - b1Y;
-            Ball.changeAngle(180 + (int) (displacment * (DegreeDeflectionRange / (p2.getHeight() / 2))));
-            System.out.println(Ball.getAngle());
+            ballObject.changeAngle(180 + (int) (displacment * (DegreeDeflectionRange / (p2.getHeight() / 2))));
+            System.out.println(ballObject.getAngle());
         }
 
 
         else{
-            Ball.changeAngle(-Ball.getAngle()+180);
+            ballObject.changeAngle(-ballObject.getAngle()+180);
         }
 
     }

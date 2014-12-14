@@ -3,7 +3,6 @@ package pong;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,10 +11,9 @@ import javax.swing.*;
 public class Board extends JPanel
 {
 	private Paddle Paddle1, Paddle2;
-    private Ball Ball1;
+    private ArrayList<Ball> Balls = null;
     private Wall WallTop,WallBottom,WallLeft,WallRight;
     private KeyControl KeyControl;
-    private ArrayList<GameObject> GameObjects;
 	private Timer TickTimer;
     private int BaseWidth;
     private int BaseHeight;
@@ -32,7 +30,7 @@ public class Board extends JPanel
     private Collision collisionDetector;
     private int Paddle1WinCount = 0;
     private int Paddle2WinCount = 0;
-    private GameState State = Board.GameState.play;
+    private GameState State = GameState.paddle1Serve;
     private float FontSize = 200f;
     private long TimeDelayAfterWin =3000;//miliseconds
     private Base base;
@@ -61,15 +59,17 @@ public class Board extends JPanel
     public void InitGameObjects(){
         Paddle1 = new Paddle(PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight,PaddleSpeed,WallWidth, PaddleWidth, PaddleHeight);
         Paddle2 = new Paddle(BoardWidth - PaddleDistanceFromWall, BoardHeight /2, BoardWidth, BoardHeight, PaddleSpeed,WallWidth,PaddleWidth,PaddleHeight);
-        Ball1 = new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState() ,BallWidth , BallHeight);
+
 
         WallTop = new Wall(0, 0, BoardWidth,WallWidth);
         WallBottom = new Wall(0, BoardHeight-WallWidth, BoardWidth,WallWidth);
         WallRight = new Wall(BoardWidth - WallWidth,0,WallWidth, BoardHeight);
         WallLeft = new Wall(0,0, WallWidth, BoardHeight);
 
-
-        collisionDetector = new Collision(Paddle1,Paddle2, Ball1,WallTop,WallBottom,WallLeft,WallRight,this);
+        Balls = new ArrayList<Ball>();
+        Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState() ,BallWidth , BallHeight));
+        Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState().getOpposite() ,BallWidth , BallHeight));
+        collisionDetector = new Collision(Paddle1,Paddle2, Balls,WallTop,WallBottom,WallLeft,WallRight,this);
 
     }
 
@@ -88,12 +88,14 @@ public class Board extends JPanel
             if(State == GameState.play) {
                 Paddle1.move();
                 Paddle2.move();
-                Ball1.move();
+                for(Ball i: Balls) {
+                    i.move();
+                }
                 collisionDetector.detectCollision();
             }
-            else if(State == GameState.paddle1Win || State == GameState.paddle2Win) {
+            else if(State == GameState.paddle1Game || State == GameState.paddle2Game) {
 
-                if(State==GameState.paddle1Win) {
+                if(State==GameState.paddle1Game) {
                     State = GameState.paddle1Serve;
                     Paddle1WinCount++;
                 }
@@ -109,6 +111,10 @@ public class Board extends JPanel
                 else{
                     long time = (new Date()).getTime()-ResetDate.getTime();
                     if(time>=TimeDelayAfterWin){
+                        if(State == GameState.paddle1Serve)
+                            State.setServeState(GameState.paddle1Serve);
+                        else
+                            State.setServeState(GameState.paddle2Serve);
                         State = GameState.play;
                         reset();
                     }
@@ -147,7 +153,9 @@ public class Board extends JPanel
         g2d.fillRect(BoardWidth /2-15,0,30, BoardHeight);
 
         g2d.setColor(Color.MAGENTA);
-        g2d.fillOval(Ball1.getX(), Ball1.getY(), BallWidth, BallHeight);
+        for(Ball i: Balls) {
+            g2d.fillOval(i.getX(), i.getY(), BallWidth, BallHeight);
+        }
 		
 		Toolkit.getDefaultToolkit().sync();
 
@@ -155,7 +163,10 @@ public class Board extends JPanel
 	}
 
     public GameState getState(){
-        return State;
+        if(State == GameState.play)
+            return State.getServeState();
+        else
+            return State;
     }
 
     public void setState(GameState state) {
@@ -166,9 +177,33 @@ public class Board extends JPanel
         play,
         paddle1Serve,
         paddle2Serve,
+        paddle1Game,
+        paddle2Game,
         paddle1Win,
-        paddle2Win,
-        gameOver
+        paddle2Win;
+
+        private GameState opposite;
+        private GameState serveState;
+        static{
+            play.opposite = play;
+            play.serveState = paddle1Serve;
+            paddle1Serve.opposite = paddle2Serve;
+            paddle2Serve.opposite = paddle1Serve;
+            paddle1Game.opposite = paddle2Game;
+            paddle2Game.opposite = paddle1Game;
+            paddle1Win.opposite = paddle2Win;
+            paddle2Win.opposite = paddle1Win;
+
+        }
+        public GameState getOpposite(){
+            return opposite;
+        }
+        public GameState getServeState(){
+            return serveState;
+        }
+        public void setServeState(GameState serveState){
+            play.serveState = serveState;
+        }
     }
 
     public void reset(){
