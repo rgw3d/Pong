@@ -20,7 +20,7 @@ public class Board extends JPanel {
     private int BoardHeight;
     private int PaddleWidth = 10;
     private int PaddleHeight = 70;
-    private int PaddleSpeed = 2;
+    private int PaddleSpeed = 3;
     private int PaddleDistanceFromWall = 100;
     private int Paddle1WinCount = 0;
     private int Paddle2WinCount = 0;
@@ -66,7 +66,7 @@ public class Board extends JPanel {
 
         Balls = new ArrayList<Ball>();
         Balls.add(new Ball(BoardWidth / 2, BoardHeight / 2, BoardWidth, BoardHeight, BallSpeed, getState(), BallWidth, BallHeight));
-        //Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState().getOpposite() ,BallWidth , BallHeight));
+        Balls.add(new Ball(BoardWidth /2, BoardHeight /2, BoardWidth, BoardHeight,BallSpeed, getState().getOpposite() ,BallWidth , BallHeight));
         collisionDetector = new Collision(Paddle1, Paddle2, Balls, WallTop, WallBottom, WallLeft, WallRight, this);
 
     }
